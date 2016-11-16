@@ -5,8 +5,6 @@ def read_raw_file():
     start_time = time.time()
     inf = open("ghcnm.tmin.v3.3.0.20161112.qcu.dat","r")
 
-    countries = {}
-
     count = 0
 
     def get_value(line,start_pos):
@@ -15,6 +13,21 @@ def read_raw_file():
         qc = line[start_pos+6:start_pos+7]
         ds = line[start_pos+7:start_pos+8]
         return (value,dm,qc,ds)
+	
+	sql = """INSERT INTO data VALUES (?,?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?,
+		?,?,?,?)
+	"""
 
     for line in inf:
         country_code = line[0:3]
@@ -39,13 +52,6 @@ def read_raw_file():
         (value11,dmflag11,qcflag11,dsflag11) = get_value(line,99)
         (value12,dmflag12,qcflag12,dsflag12) = get_value(line,107)
 
-        if countries.has_key(country_code):
-            tmp = countries[country_code]
-            tmp = tmp + 1
-            countries[country_code] = tmp
-        else:
-            countries[country_code] = 1
-
         count = count + 1
 
     inf.close()
@@ -54,7 +60,6 @@ def read_raw_file():
     print "----------------------------"
     print "start",start_time, "stop", stop_time, "diff", (stop_time-start_time)
     print "lines", count
-    # print countries
 
 def create_db():
     import sqlite3
